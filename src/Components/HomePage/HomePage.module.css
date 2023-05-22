@@ -1,0 +1,80 @@
+.postPage{
+    display: flex;
+    gap: 20px;
+    padding: 18px;
+}
+.postPageContainer{
+    border: 1px solid rgb(220, 220, 220);
+    height: 80px;
+    border-radius: 8px;
+}
+.contentContainer{
+    display: grid;
+    grid-template-columns: 70% 30%;
+    gap: 30px;
+    padding: 20px;
+}
+.buttonBar{
+    border: none;
+    border-radius: 10px;
+    height: 45px;
+    width: 420%;
+    margin: 0;
+}
+.buttonBar:hover{
+    cursor: pointer;
+}
+.profileName{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.profile{
+    display: flex;
+}
+.refresh{
+    display: flex;
+    justify-content: space-between;
+    height: 60px;
+}
+.refreshIcon{
+    margin: 25px;
+}
+.iconSize{
+    font-size: 50px;
+}
+.modelCloseIcon{
+    display: flex;
+    justify-content: space-between;
+}
+.cross{
+    margin-bottom: 30px;
+}
+.cross:hover{
+    cursor: pointer;
+}
+.fileIcons{
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+.fileIcons:hover{
+    cursor: pointer;
+}
+.postButton{
+    display: flex;
+    justify-content: center;
+}
+.postButtonIcon{
+    background-color: grey;
+    border: none;
+    color: white;
+    width: 400%;
+    height: 40px;
+    font-size: 26px;
+}
+.postButtonIcon:hover{
+    cursor: pointer;
+}
