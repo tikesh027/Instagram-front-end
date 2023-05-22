@@ -1,0 +1,35 @@
+.container{
+    border: 1px solid grey;
+}
+.image{
+    max-width: 100%;
+}
+.profiledata{
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+}
+.postHeader{
+    display: flex;
+}
+.icon{
+    font-size: 50px;
+    margin-left: 10px;
+}
+.postTitle{
+    margin: 0 0 15px 15px;
+}
+.likeCommentShare{
+    display: flex;
+    gap: 15px;
+    margin: 10px 0 0 10px;
+}
+.iconContainer{
+    display: flex;
+    justify-content: space-between;
+}
+.savedIcon{
+    display: flex;
+    margin-top: 10px;
+    margin-right: 10px;
+}

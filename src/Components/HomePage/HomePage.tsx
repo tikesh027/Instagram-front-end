@@ -8,6 +8,7 @@ import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import styles from "./HomePage.module.css";
 import SuggestionProfile from "./suggestionProfile/SuggestionProfile";
 import { Box, Modal, Typography } from "@mui/material";
+import Post from "./Post/Post";
 
 const HomePage = () => {
   const [open, setOpen] = React.useState(false);
@@ -16,10 +17,10 @@ const HomePage = () => {
 
   const style = {
     position: "absolute" as "absolute",
-    top: "66%",
+    top: "55%",
     left: "74%",
     transform: "translate(-50%, -50%)",
-    width: 800,
+    width: 600,
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
@@ -43,6 +44,7 @@ const HomePage = () => {
               </button>
             </div>
           </div>
+          <Post/>
         </div>
         <div>
           <div>

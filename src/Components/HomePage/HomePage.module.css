@@ -13,6 +13,7 @@
     grid-template-columns: 70% 30%;
     gap: 30px;
     padding: 20px;
+    height: 100px;
 }
 .buttonBar{
     border: none;

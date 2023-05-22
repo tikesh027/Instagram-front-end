@@ -7,6 +7,7 @@ import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Fade from '@mui/material/Fade';
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -31,7 +32,7 @@ const Navigation = () => {
           />
         </div>
         <div className={styles.iconsContainer}>
-            <button className={styles.icons}><HomeIcon /></button>
+            <button className={styles.icons}><Link className={styles.link} to={"/"}><HomeIcon /></Link></button>
             <button className={styles.icons}><MessageIcon/></button>
             <button className={styles.icons}><NotificationsIcon/></button>
             <button className={styles.icons} onClick={handleClick} ><AccountCircleSharpIcon/></button>
@@ -47,8 +48,8 @@ const Navigation = () => {
         onClose={handleClose}
         TransitionComponent={Fade}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <Link to={"/MyProfile"}><MenuItem onClick={handleClose}>Profile</MenuItem></Link>
+        <Link to={"/login"}><MenuItem onClick={handleClose}>Logout</MenuItem></Link>
       </Menu>
     
     </div>

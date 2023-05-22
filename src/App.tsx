@@ -5,6 +5,7 @@ import LoginForm from "./Components/LogInForm/LogInForm";
 import HomePage from "./Components/HomePage/HomePage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SuggestionProfile from "./Components/HomePage/suggestionProfile/SuggestionProfile";
+import Profile from "./Components/HomePage/Profile/Profile";
 
 const App: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const App: React.FC = () => {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignUpForm />} />
           <Route path="/suggestions" element={<SuggestionProfile />} />
+          <Route path="/MyProfile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </div>

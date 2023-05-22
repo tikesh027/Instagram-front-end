@@ -1,0 +1,46 @@
+.profile{
+    margin-top: 18px;
+    margin-left: 10px;
+    display: flex;
+}
+.commentWrapper{ 
+    margin: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: rgb(176, 176, 176);
+    border-radius: 5px;
+    height: 45px;
+    padding: 10px;
+}
+.comments{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.likeReply{
+    display: flex;
+    flex-direction: row;
+    margin-top: 2px;
+    width: inherit;
+    display: flex;
+    gap: 15px;
+}
+.commentInput{
+    border: 1px solid gray;
+    width: 906px;
+    height: 40px;
+    margin-top: 10px;
+}
+.commentInputContainer{
+    display: flex;
+}
+.commentButton{
+    margin-top: 9px;
+    height: 45px;
+    border: 1px solid grey;
+    background-color: white;
+}
+.edit{
+    display: flex;
+    align-items: flex-end;
+}
