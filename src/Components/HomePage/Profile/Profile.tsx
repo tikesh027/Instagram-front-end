@@ -3,6 +3,7 @@ import Navigation from "../Navigation/Navigation";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import styles from "./Profile.module.css";
+import PostGallery from "../PostGallery/PostGallery";
 
 type TabList = "POST" | "SAVED_POST";
 
@@ -61,6 +62,7 @@ const Profile = () => {
                     "imageURL 2"
                 ]}
             /> */}
+            
           </>
         ) : (
           <>

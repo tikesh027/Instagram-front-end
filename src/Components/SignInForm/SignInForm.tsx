@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styles from "./SignInForm.module.css";
 import InputWithLabel from "../CommonComponents/InputWithLabel/InputWithLabel";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signup } from "../../Actions/UserActions/UserActions";
 
 type formInput = {
   value: string;
@@ -10,6 +12,7 @@ type formInput = {
 };
 
 const LoginForm: React.FC = () => {
+  const dispatch = useDispatch<any>();
   const [fullName, setFullName] = useState<formInput>({
     value: "",
     error: "",
@@ -75,28 +78,31 @@ const LoginForm: React.FC = () => {
   };
 
   const validateFrom = () => {
+    let validationFlag = true;
     if (fullName.value === "") {
       setFullName({
         ...fullName,
         isValid: false,
         error: "Please Fill your FULLNAME",
       });
-      return false;
+      validationFlag = false;
     }
-    
-    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAddress.value)) {
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAddress.value)) {
       setEmailAddress({
         ...emailAddress,
         isValid: false,
         error: "Please Fill a Valid Email Address",
       });
+      validationFlag = false;
     }
-    if (password.value.length !== 6) {
+    if (password.value.length < 6) {
       setPassword({
         ...password,
         isValid: false,
         error: "Password is Less than 6 Character",
       });
+      validationFlag = false;
     }
     if (confirmPassword.value !== password.value) {
       setConfirmPassword({
@@ -104,11 +110,27 @@ const LoginForm: React.FC = () => {
         isValid: false,
         error: "Password Does not match",
       });
+      validationFlag = false;
     }
+    return validationFlag;
   };
 
   const submitForm = () => {
-    validateFrom();
+    if (validateFrom()) {
+      dispatch(
+        signup(
+          emailAddress.value,
+          userName.value,
+          fullName.value,
+          password.value,
+          "Male"
+        )
+      ).then((res: any) => {
+
+      }).catch((err:any) => {
+        console.log(err);
+      });
+    }
   };
 
   return (
@@ -177,11 +199,15 @@ const LoginForm: React.FC = () => {
           </label>
         </div>
         <div>
-          <button className={styles.registerButton} onClick={submitForm}>Register</button>
+          <button className={styles.registerButton} onClick={submitForm}>
+            Register
+          </button>
         </div>
         <div className={styles.account}>
           <h3>Already Have an Account?</h3>
-          <Link className={styles.button} to={"/login"}>LogIn Now</Link>
+          <Link className={styles.button} to={"/login"}>
+            LogIn Now
+          </Link>
         </div>
       </div>
     </div>

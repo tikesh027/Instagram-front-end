@@ -1,7 +1,7 @@
 .postPage{
     display: flex;
     gap: 20px;
-    padding: 18px;
+    padding: 10px;
 }
 .postPageContainer{
     border: 1px solid rgb(220, 220, 220);
@@ -42,7 +42,8 @@
     margin: 25px;
 }
 .iconSize{
-    font-size: 50px;
+    font-size: 55px;
+    padding: 0;
 }
 .modelCloseIcon{
     display: flex;
@@ -78,4 +79,9 @@
 }
 .postButtonIcon:hover{
     cursor: pointer;
+}
+.postTextField{
+    height: 60px;
+    width: 100%;
+    border: 0;
 }

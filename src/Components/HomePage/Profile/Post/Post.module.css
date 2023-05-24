@@ -1,5 +1,6 @@
 .container{
     border: 1px solid grey;
+    margin-bottom: 50px;
 }
 .image{
     max-width: 100%;
@@ -11,10 +12,19 @@
 }
 .postHeader{
     display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
 }
 .icon{
-    font-size: 50px;
-    margin-left: 10px;
+    width: 30px;
+    margin-top: 10px;
+    margin-left: 12px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 .postTitle{
     margin: 0 0 15px 15px;
@@ -32,4 +42,8 @@
     display: flex;
     margin-top: 10px;
     margin-right: 10px;
+}
+.options{
+    display: flex;
+    flex-direction: row;
 }

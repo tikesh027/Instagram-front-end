@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import InputWithLabel from "../CommonComponents/InputWithLabel/InputWithLabel";
 import styles from "./LogInForm.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../../Actions/UserActions/UserActions";
 
 type signUpInput = {
   value: string;
@@ -10,6 +12,8 @@ type signUpInput = {
 };
 
 const SignUpForm: React.FC = () => {
+  const dispatch = useDispatch<any>();
+  const naigate = useNavigate();
   const [emailAddress, setEmailAddress] = useState<signUpInput>({
     value: "",
     isValid: true,
@@ -37,13 +41,17 @@ const SignUpForm: React.FC = () => {
   };
 
   const validateFrom = () => {
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAddress.value) || emailAddress.value === "") {
+    let validationFlag = true;
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAddress.value) ||
+      emailAddress.value === ""
+    ) {
       setEmailAddress({
         ...emailAddress,
         isValid: false,
         errorMessage: "Please Fill a Valid Email Address",
       });
-      return false;
+      validationFlag = false;
     }
     if (password.value.length < 6) {
       setPassword({
@@ -51,11 +59,20 @@ const SignUpForm: React.FC = () => {
         isValid: false,
         errorMessage: "Password is Less than 6 Character",
       });
-      return false;
+      validationFlag = false;
     }
+    return validationFlag;
   };
   const submitForm = () => {
-    validateFrom();
+    if (validateFrom()) {
+      dispatch(login(emailAddress.value, password.value))
+      .then((res: any) => {
+        naigate('/');
+        console.log("here", res);
+      }).catch((error: any) => {
+        console.log(error);
+      });
+    }
   };
 
   return (
@@ -85,7 +102,9 @@ const SignUpForm: React.FC = () => {
         </div>
         <div className={styles.account}>
           <p>Don't have an account?</p>
-          <Link className={styles.button} to={"/signup"}>Register Now</Link>
+          <Link className={styles.button} to={"/signup"}>
+            Register Now
+          </Link>
         </div>
       </div>
     </div>
