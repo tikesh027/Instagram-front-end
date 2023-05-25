@@ -36,7 +36,7 @@ export type TRecommendation = {
 
 export type TPost = {
   _id: string;
-  comment: string[];
+  comment: any[];
   content: string;
   image: string[];
   like: string[];
@@ -91,7 +91,7 @@ const HomePage = () => {
         postsArray.forEach((item: any) => {
           posts.push({
             _id: item._id,
-            comment: item.comment,
+            comment: item.comments,
             content: item.content,
             image: item.image,
             like: item.like,

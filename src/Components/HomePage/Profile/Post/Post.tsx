@@ -143,7 +143,7 @@ const Post: React.FC<PostProps> = (props) => {
           </div>
         </div>
         <div>
-          <CommentWrapper />
+          <CommentWrapper postId={props._id} comment={props.comment} refreshComments={props.reFreshPost}/>
         </div>
       </div>
       <Menu
@@ -162,6 +162,7 @@ const Post: React.FC<PostProps> = (props) => {
           <MenuItem onClick={handleClose}>CopyLink</MenuItem>
         </div>
       </Menu>
+      
     </div>
   );
 };
