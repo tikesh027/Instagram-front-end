@@ -1,11 +1,64 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import styles from "../suggestionProfile/SuggestionProfile.module.css";
 import { TRecommendation } from "../HomePage";
+import axios from "axios";
+import { BASE_URL } from "../../../Constant/Constant";
+import { useSelector } from "react-redux";
+import { TStore } from "../../../Store/store";
 
 type SuggestionProfileProps = TRecommendation;
 
 const SuggestionProfile: React.FC<SuggestionProfileProps> = (props) => {
+  const user: any = useSelector<TStore>((state) => state.User);
+  const [followUser, setFollowUser] = useState(false);
+  const [followButton, setFollowButton] = useState(false);
+
+  useEffect(() => {
+    const following = user.login.data.user.following;
+    const id = following.find((item: string)=> item === props._id);
+    setFollowUser(Boolean(id));
+  },[])
+
+  const follow = async () => {
+    const accessToken = user?.login?.data?.access_token;
+    if (!accessToken) return;
+    setFollowButton(true);
+    try {
+      if (followUser === false) {
+        const data = await axios.get(`${BASE_URL}/user/${props._id}/follow`, {
+          headers: {
+            "X-Authorization": accessToken,
+          },
+        });
+        setFollowUser(true);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFollowButton(false);
+    }
+  };
+
+  const unFollow = async () => {
+    const accessToken = user?.login?.data?.access_token;
+    if (!accessToken) return;
+    setFollowButton(true);
+    try {
+      const data = await axios.get(`${BASE_URL}/user/${props._id}/unfollow`, {
+        headers: {
+          "X-Authorization": accessToken,
+        },
+      });
+      setFollowUser(false);
+      console.log(data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFollowButton(false);
+    }
+  };
+
   return (
     <div>
       <div className={styles.container}>
@@ -20,7 +73,23 @@ const SuggestionProfile: React.FC<SuggestionProfileProps> = (props) => {
           <p className={styles.user}>{props.fullname}</p>
         </div>
         <div className={styles.follow}>
-          <button className={styles.followButton}>Follow</button>
+          {followUser === false ? (
+            <button
+              disabled={followButton}
+              onClick={follow}
+              className={styles.followButton}
+            >
+              Follow
+            </button>
+          ) : (
+            <button
+              disabled={followButton}
+              onClick={unFollow}
+              className={styles.followButton}
+            >
+              Unfollow
+            </button>
+          )}
         </div>
       </div>
     </div>

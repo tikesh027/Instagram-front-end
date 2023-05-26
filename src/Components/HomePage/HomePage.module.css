@@ -40,6 +40,11 @@
 }
 .refreshIcon{
     margin: 25px;
+    background-color: white;
+    border: none;
+}
+.refreshIcon:hover{
+    cursor: pointer;
 }
 .iconSize{
     font-size: 55px;

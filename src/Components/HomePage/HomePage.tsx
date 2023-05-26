@@ -192,8 +192,10 @@ const HomePage = () => {
             </div>
             <div className={styles.refresh}>
               <h2>Recommendation</h2>
-              <div className={styles.refreshIcon}>
+              <div>
+                <button onClick={getAllRecommendations} className={styles.refreshIcon}>
                 <RefreshIcon />
+                </button>
               </div>
             </div>
             <div>
