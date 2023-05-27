@@ -13,7 +13,7 @@ type signUpInput = {
 
 const SignUpForm: React.FC = () => {
   const dispatch = useDispatch<any>();
-  const naigate = useNavigate();
+  const navigate = useNavigate();
   const [emailAddress, setEmailAddress] = useState<signUpInput>({
     value: "",
     isValid: true,
@@ -67,7 +67,7 @@ const SignUpForm: React.FC = () => {
     if (validateFrom()) {
       dispatch(login(emailAddress.value, password.value))
       .then((res: any) => {
-        naigate('/');
+        navigate('/');
         console.log("here", res);
       }).catch((error: any) => {
         console.log(error);
