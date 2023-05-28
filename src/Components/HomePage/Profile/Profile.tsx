@@ -8,8 +8,6 @@ import ClearIcon from "@mui/icons-material/Clear";
 import EditProfile from "./EditProfile/EditProfile";
 import { useSelector } from "react-redux";
 import { TStore } from "../../../Store/store";
-import axios from "axios";
-import { BASE_URL } from "../../../Constant/Constant";
 
 const style = {
   position: "absolute" as "absolute",
@@ -37,8 +35,6 @@ const Profile = () => {
   const handleActiveTab = (tab: TabList) => {
     setActiveTab(tab);
   };
-
-  
 
   return (
     <div>

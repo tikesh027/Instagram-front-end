@@ -162,13 +162,13 @@ const EditProfile: React.FC = () => {
     const accessToken = user?.login?.data?.access_token;
     if (!accessToken) return;
     const userData = {
-      avatar: avatar,
-      fullname: fullName,
-      mobile: mobileNo,
-      address: address,
-      story: story,
-      website: website,
-      gender: gender,
+      avatar: avatar.value,
+      fullname: fullName.value,
+      mobile: mobileNo.value,
+      address: address.value,
+      story: story.value,
+      website: website.value,
+      gender: gender.value,
     };
     try {
       const data = await axios.post(`${BASE_URL}/user`, userData,{
