@@ -6,6 +6,7 @@ import { TStore } from "../../../../Store/store";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../../../../Constant/Constant";
+import { getAccessTokenFromCookie } from "../../../../Constant/helpers";
 
 type CommentWrapperProps = {
   postId: string;
@@ -22,7 +23,7 @@ const CommentWrapper: React.FC<CommentWrapperProps> = (props) => {
   };
 
   const onCreateComment = async () => {
-    const accessToken = user?.login?.data?.access_token;
+    const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
     if (createComment === "") {
       return;

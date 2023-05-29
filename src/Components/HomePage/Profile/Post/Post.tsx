@@ -11,11 +11,13 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Fade from "@mui/material/Fade";
 import { TPost } from "../../HomePage";
-import { formatDateToRelative } from "../../../../Constant/helpers";
+import { formatDateToRelative, getAccessTokenFromCookie } from "../../../../Constant/helpers";
 import { useSelector } from "react-redux";
 import axios from 'axios';
 import { BASE_URL } from "../../../../Constant/Constant";
 import { TStore } from "../../../../Store/store";
+import SimpleSlider from "./ImageSlider";
+
 
 type PostProps = TPost & {
   openEditModal: () => void;
@@ -54,7 +56,7 @@ const Post: React.FC<PostProps> = (props) => {
 
 
   const deletePost = async () => {
-    const accessToken = user?.login?.data?.access_token;
+    const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
     try {
       const data = await axios.delete(`${BASE_URL}/post/${props._id}`, {
@@ -70,7 +72,7 @@ const Post: React.FC<PostProps> = (props) => {
   }
 
   const likedPost = async () => {
-    const accessToken = user?.login?.data?.access_token;
+    const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
     try {
       if(liked === false){
@@ -122,7 +124,12 @@ const Post: React.FC<PostProps> = (props) => {
           <p className={styles.postTitle}>{props.content}</p>
         </div>
         <div className={styles.image}>
-          <img className={styles.image} src={props.image[0]} alt="" />
+          <SimpleSlider>
+          {props.image.map((image) => (
+            <img className={styles.image} src={`${BASE_URL}/${image}`} alt="" />
+          ))}
+          </SimpleSlider>
+          
         </div>
         <div className={styles.iconContainer}>
           <div className={styles.likeCommentShare}>

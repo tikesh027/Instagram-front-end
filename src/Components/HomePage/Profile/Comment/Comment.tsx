@@ -8,6 +8,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { TStore } from "../../../../Store/store";
 import { BASE_URL } from "../../../../Constant/Constant";
+import { getAccessTokenFromCookie } from "../../../../Constant/helpers";
 
 export type TComment = {
   content: string;
@@ -38,7 +39,7 @@ const Comment: React.FC<CommentProps> = (props) => {
   };
   
   const onCommentEditComplete = async () => {
-    const accessToken = user?.login?.data?.access_token;
+    const accessToken = getAccessTokenFromCookie();
     if(!accessToken) return;
     const userComment = {
       content: commentText
@@ -72,7 +73,7 @@ const Comment: React.FC<CommentProps> = (props) => {
     
   }
   const onDelete = async () => {
-    const accessToken = user?.login?.data?.access_token;
+    const accessToken = getAccessTokenFromCookie();
     if(!accessToken) return;
     try{
       const data = await axios.delete(`${BASE_URL}/comment/${props._id}`, {

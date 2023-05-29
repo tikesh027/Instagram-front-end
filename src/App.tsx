@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 import "./App.css";
 import SignUpForm from "./Components/SignInForm/SignInForm";
 import LoginForm from "./Components/LogInForm/LogInForm";
@@ -6,8 +9,13 @@ import HomePage from "./Components/HomePage/HomePage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SuggestionProfile from "./Components/HomePage/suggestionProfile/SuggestionProfile";
 import Profile from "./Components/HomePage/Profile/Profile";
+import { fetchUserLoggedInUserDetails } from "./Actions/UserDetailsAction/UserDetailsAction";
 
 const App: React.FC = () => {
+  const dispatch = useDispatch<any>();
+  useEffect(() => {
+    dispatch(fetchUserLoggedInUserDetails());
+  }, []);
   return (
     <div>
       <BrowserRouter>

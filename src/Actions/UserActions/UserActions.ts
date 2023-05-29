@@ -1,7 +1,10 @@
 import axios from "axios";
+import Cookies from 'universal-cookie';
 import { USER_ACTION_TYPES } from "./UserActionTypes";
 import { TACTION } from "../../Store/storeTypes";
 import { BASE_URL } from "../../Constant/Constant";
+
+const cookies = new Cookies();
 
 function signupStart(): TACTION {
   return {
@@ -93,6 +96,8 @@ export function login(email: string, password: string) {
         .post(`${BASE_URL}/login`, data)
         .then((response) => {
           dispatch(loginSuccess(response.data));
+          const accessToken = response.data?.access_token;
+          cookies.set('user-access-token', accessToken);
           resolve(response.data);
         })
         .catch((error) => {

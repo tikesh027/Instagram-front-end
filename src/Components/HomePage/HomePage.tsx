@@ -13,12 +13,15 @@ import Post from "./Profile/Post/Post";
 import { TStore } from "../../Store/store";
 import axios from "axios";
 import { BASE_URL } from "../../Constant/Constant";
+import { getAccessTokenFromCookie } from "../../Constant/helpers";
+import { cloneDeep } from "lodash";
 
 const style = {
   position: "absolute" as "absolute",
-  top: "55%",
-  left: "74%",
-  transform: "translate(-50%, -50%)",
+  bottom: 0,
+  right: 0,
+  maxHeight: '70%',
+  overflow: 'auto',
   width: 600,
   bgcolor: "background.paper",
   border: "2px solid #000",
@@ -51,19 +54,25 @@ export type TPost = {
 
 const HomePage = () => {
   const user: any = useSelector<TStore>((state) => state.User);
+  const [uploadedDisplayImages, setUploadedDisplayImages] = useState<string[]>(
+    []
+  );
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
   const [userRecommendation, setUserRecommendation] = useState<
     TRecommendation[]
   >([]);
   const [allPosts, setAllPosts] = useState<TPost[]>([]);
   const [newPostContent, setNewPostContent] = useState("");
   const [open, setOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const getAllRecommendations = async () => {
-    const accessToken = user?.login?.data?.access_token;
+    const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
     try {
+      setIsLoading(true);
       const data = await axios.get(`${BASE_URL}/search`, {
         headers: {
           "X-Authorization": accessToken,
@@ -74,10 +83,13 @@ const HomePage = () => {
     } catch (error) {
       console.log(error);
     }
+    finally{
+      setIsLoading(false);
+    }
   };
 
   const getAllPosts = async () => {
-    const accessToken = user?.login?.data?.access_token;
+    const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
     try {
       const data = await axios.get(`${BASE_URL}/posts`, {
@@ -122,18 +134,25 @@ const HomePage = () => {
   };
 
   const onSubmitNewPost = async () => {
-    const accessToken = user?.login?.data?.access_token;
+    const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
     try {
       if (newPostContent === "") {
         return;
       } else {
-        const newPostData = {
-          content: newPostContent,
-          image: [],
-        };
+        // const newPostData = {
+        //   content: newPostContent,
+        //   image: [],
+        // };
+        const formData = new FormData();
+        formData.append('content', newPostContent);
+        uploadedImages.forEach((image) => {
+          formData.append('image', image, image.name);
+        });
+        console.log(formData.getAll('image'));
+        
 
-        const data = await axios.post(`${BASE_URL}/posts`, newPostData, {
+        const data = await axios.post(`${BASE_URL}/posts`, formData, {
           headers: {
             "X-Authorization": accessToken,
           },
@@ -145,6 +164,33 @@ const HomePage = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) return;
+    console.log(files);
+    if (files.length > 2) {
+      alert("You can only upload a maximum of 2 files.");
+      // Clear the file input
+      event.target.value = "";
+    }
+    const imageUrls = Array.from(files).map((image) => {
+      const imageUrl = URL.createObjectURL(image);
+      return imageUrl;
+    });
+    setUploadedDisplayImages(imageUrls);
+    const filesArray = Array.from(files);
+    setUploadedImages(filesArray);
+  };
+
+  const removeUploadedImage = (index: number) => {
+    const updatedDisplayImages = [...uploadedDisplayImages];
+    const updatedUploadedImages = [...uploadedImages];
+    updatedDisplayImages.splice(index, 1);
+    updatedUploadedImages.splice(index, 1);
+    setUploadedDisplayImages(updatedDisplayImages);
+    setUploadedImages(updatedUploadedImages);
   };
 
   return (
@@ -193,8 +239,11 @@ const HomePage = () => {
             <div className={styles.refresh}>
               <h2>Recommendation</h2>
               <div>
-                <button onClick={getAllRecommendations} className={styles.refreshIcon}>
-                <RefreshIcon />
+                <button
+                  onClick={getAllRecommendations}
+                  className={`${styles.refreshIcon} ${isLoading ? styles.refreshIconAnimate : null}`} 
+                >
+                  <RefreshIcon />
                 </button>
               </div>
             </div>
@@ -243,8 +292,33 @@ const HomePage = () => {
                 placeholder={`Hi, Tikesh@22 Whats on Your Mind ?`}
               />
             </Typography>
+            <div className={styles.uploadedImageCtr}>
+              {uploadedDisplayImages.map((image, index) => (
+                <div className={styles.uploadedImageWrapper}>
+                  <button
+                    onClick={() => removeUploadedImage(index)}
+                    className={styles.uploadedImageRemoveBtn}
+                  >
+                    <ClearIcon />
+                  </button>
+                  <img
+                    key={index}
+                    src={image}
+                    className={styles.uploadedImage}
+                    alt=""
+                  />
+                </div>
+              ))}
+            </div>
             <div className={styles.fileIcons}>
               <PhotoCameraIcon fontSize="inherit" />
+              <input
+                type="file"
+                multiple
+                onChange={handleFileUpload}
+                name=""
+                id=""
+              />
               <InsertPhotoIcon fontSize="inherit" />
             </div>
             <div className={styles.postButton}>

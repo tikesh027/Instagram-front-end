@@ -6,22 +6,25 @@ import axios from "axios";
 import { BASE_URL } from "../../../Constant/Constant";
 import { useSelector } from "react-redux";
 import { TStore } from "../../../Store/store";
+import { getAccessTokenFromCookie } from "../../../Constant/helpers";
 
 type SuggestionProfileProps = TRecommendation;
 
 const SuggestionProfile: React.FC<SuggestionProfileProps> = (props) => {
-  const user: any = useSelector<TStore>((state) => state.User);
+  const user: any = useSelector<TStore>((state) => state.loggedInUserDetails);
   const [followUser, setFollowUser] = useState(false);
   const [followButton, setFollowButton] = useState(false);
 
   useEffect(() => {
-    const following = user.login.data.user.following;
-    const id = following.find((item: string)=> item === props._id);
-    setFollowUser(Boolean(id));
-  },[])
+    if (user.data) {
+      const following = user.data.userData.following;
+      const id = following.find((item: string) => item === props._id);
+      setFollowUser(Boolean(id));
+    }
+  }, [user]);
 
   const follow = async () => {
-    const accessToken = user?.login?.data?.access_token;
+    const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
     setFollowButton(true);
     try {
@@ -41,7 +44,7 @@ const SuggestionProfile: React.FC<SuggestionProfileProps> = (props) => {
   };
 
   const unFollow = async () => {
-    const accessToken = user?.login?.data?.access_token;
+    const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
     setFollowButton(true);
     try {

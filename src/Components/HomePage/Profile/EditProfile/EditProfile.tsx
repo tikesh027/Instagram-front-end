@@ -5,6 +5,7 @@ import { TStore } from "../../../../Store/store";
 import axios from "axios";
 import { BASE_URL } from "../../../../Constant/Constant";
 import styles from "./EditProfile.module.css";
+import { getAccessTokenFromCookie } from "../../../../Constant/helpers";
 
 type updateForm = {
   value: string;
@@ -159,7 +160,7 @@ const EditProfile: React.FC = () => {
 
   const editUserProfile = async () => {
     if (!userValidator()) return;
-    const accessToken = user?.login?.data?.access_token;
+    const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
     const userData = {
       avatar: avatar.value,
