@@ -1,7 +1,8 @@
 .postPage{
     display: flex;
     gap: 20px;
-    padding: 10px;
+    margin: 10px;
+    width: auto;
 }
 .postPageContainer{
     border: 1px solid rgb(220, 220, 220);
@@ -19,11 +20,14 @@
     border: none;
     border-radius: 10px;
     height: 45px;
-    width: 420%;
-    margin: 0;
+    width: 100%;
+    margin: 8px;
 }
 .buttonBar:hover{
     cursor: pointer;
+}
+.buttonBarSize{
+    width: 90%;
 }
 .profileName{
     display: flex;
@@ -32,6 +36,8 @@
 }
 .profile{
     display: flex;
+    gap: 10px;
+    align-items: center;
 }
 .refresh{
     display: flex;
@@ -54,7 +60,7 @@
     animation: spin 100ms infinite;
 }
 .iconSize{
-    font-size: 55px;
+    font-size: 50px;
     padding: 0;
 }
 .modelCloseIcon{
@@ -139,4 +145,11 @@
 }
 .uploadedImageRemoveBtn:hover{
     cursor: pointer;
+}
+.userIcon{
+    display: flex;
+    width: 12%;
+}
+.avatarButtonBarIcon{
+    width: 5%;
 }

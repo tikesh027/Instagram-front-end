@@ -20,8 +20,8 @@ const style = {
   position: "absolute" as "absolute",
   bottom: 0,
   right: 0,
-  maxHeight: '70%',
-  overflow: 'auto',
+  maxHeight: "70%",
+  overflow: "auto",
   width: 600,
   bgcolor: "background.paper",
   border: "2px solid #000",
@@ -53,7 +53,7 @@ export type TPost = {
 };
 
 const HomePage = () => {
-  const user: any = useSelector<TStore>((state) => state.User);
+  const user: any = useSelector<TStore>((state) => state.loggedInUserDetails);
   const [uploadedDisplayImages, setUploadedDisplayImages] = useState<string[]>(
     []
   );
@@ -65,8 +65,14 @@ const HomePage = () => {
   const [newPostContent, setNewPostContent] = useState("");
   const [open, setOpen] = React.useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditPost, setIsEditPost] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<TPost | null>(null);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setIsEditPost(false);
+    setSelectedPost(null);
+  };
 
   const getAllRecommendations = async () => {
     const accessToken = getAccessTokenFromCookie();
@@ -82,8 +88,7 @@ const HomePage = () => {
       console.log(data.data);
     } catch (error) {
       console.log(error);
-    }
-    finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -133,6 +138,34 @@ const HomePage = () => {
     setNewPostContent(event.target.value);
   };
 
+  const onSubmitEditPost = async () => {
+    const accessToken = getAccessTokenFromCookie();
+    if (!accessToken) return;
+    try {
+      const formData = new FormData();
+      formData.append("content", newPostContent);
+      if (uploadedDisplayImages.length && uploadedImages.length) {
+        uploadedImages.forEach((image) => {
+          formData.append("image", image, image.name);
+        });
+      }
+      const data = await axios.post(
+        `${BASE_URL}/post/${selectedPost?._id}`,
+        formData,
+        {
+          headers: {
+            "X-Authorization": accessToken,
+          },
+        }
+      );
+      console.log(data.data);
+      getAllPosts();
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onSubmitNewPost = async () => {
     const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
@@ -145,12 +178,19 @@ const HomePage = () => {
         //   image: [],
         // };
         const formData = new FormData();
-        formData.append('content', newPostContent);
-        uploadedImages.forEach((image) => {
-          formData.append('image', image, image.name);
-        });
-        console.log(formData.getAll('image'));
-        
+        formData.append("content", newPostContent);
+        if (uploadedDisplayImages.length) {
+          uploadedImages.forEach((image) => {
+            formData.append("image", image, image.name);
+          });
+        }
+        console.log(formData.getAll("image"));
+        /*
+          {
+            content: '',
+            image: []
+          }
+        */
 
         const data = await axios.post(`${BASE_URL}/posts`, formData, {
           headers: {
@@ -193,6 +233,15 @@ const HomePage = () => {
     setUploadedImages(updatedUploadedImages);
   };
 
+  const handleEditPost = (post: TPost) => {
+    setIsEditPost(true);
+    setOpen(true);
+    setSelectedPost(post);
+    setNewPostContent(post.content);
+    const imageUrls = post.image.map((url) => `${BASE_URL}/${url}`);
+    setUploadedDisplayImages(imageUrls);
+  };
+
   return (
     <div>
       <div>
@@ -201,19 +250,20 @@ const HomePage = () => {
       <div className={styles.contentContainer}>
         <div className={styles.postPageContainer}>
           <div className={styles.postPage}>
-            <div className={styles.iconSize}>
-              <AccountCircleIcon fontSize="inherit" />
-            </div>
-            <div>
+            <img
+                className={styles.avatarButtonBarIcon}
+                src={user?.data?.userData?.avatar}
+              />
+            <div className={styles.buttonBarSize}>
               <button className={styles.buttonBar} onClick={handleOpen}>
-                Tikesh What are you Thinking?
+                {user?.data?.userData?.fullname} What are you Thinking?
               </button>
             </div>
           </div>
           {allPosts.map((post) => (
             <Post
               reFreshPost={getAllPosts}
-              openEditModal={handleOpen}
+              openEditModal={() => handleEditPost(post)}
               _id={post._id}
               key={post._id}
               comment={post.comment}
@@ -228,12 +278,13 @@ const HomePage = () => {
         <div>
           <div>
             <div className={styles.profile}>
-              <div className={styles.iconSize}>
-                <AccountCircleIcon fontSize="inherit" />
-              </div>
+              <img
+                className={styles.userIcon}
+                src={user?.data?.userData?.avatar}
+              />
               <div className={styles.profileName}>
-                <span>Tikesh@22</span>
-                <span>Tikesh Singh</span>
+                <span>{user?.data?.userData?.username}</span>
+                <span>{user?.data?.userData?.fullname}</span>
               </div>
             </div>
             <div className={styles.refresh}>
@@ -241,7 +292,9 @@ const HomePage = () => {
               <div>
                 <button
                   onClick={getAllRecommendations}
-                  className={`${styles.refreshIcon} ${isLoading ? styles.refreshIconAnimate : null}`} 
+                  className={`${styles.refreshIcon} ${
+                    isLoading ? styles.refreshIconAnimate : null
+                  }`}
                 >
                   <RefreshIcon />
                 </button>
@@ -273,7 +326,7 @@ const HomePage = () => {
             <div className={styles.modelCloseIcon}>
               <div>
                 <Typography id="modal-modal-title" variant="h4" component="h2">
-                  Create Post
+                  {isEditPost ? "Edit Post" : "Create Post"}
                   <hr />
                 </Typography>
               </div>
@@ -288,6 +341,7 @@ const HomePage = () => {
               <input
                 className={styles.postTextField}
                 onChange={handlePostContent}
+                value={newPostContent}
                 type="text"
                 placeholder={`Hi, Tikesh@22 Whats on Your Mind ?`}
               />
@@ -323,7 +377,7 @@ const HomePage = () => {
             </div>
             <div className={styles.postButton}>
               <button
-                onClick={onSubmitNewPost}
+                onClick={isEditPost ? onSubmitEditPost : onSubmitNewPost}
                 className={styles.postButtonIcon}
               >
                 Post

@@ -10,6 +10,7 @@ import CommentWrapper from "../Comment/CommentWrapper";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Fade from "@mui/material/Fade";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { TPost } from "../../HomePage";
 import { formatDateToRelative, getAccessTokenFromCookie } from "../../../../Constant/helpers";
 import { useSelector } from "react-redux";
@@ -25,12 +26,12 @@ type PostProps = TPost & {
 };
 
 const Post: React.FC<PostProps> = (props) => {
-  const user: any = useSelector<TStore>((state) => state.User);
+  const user: any = useSelector<TStore>((state) => state.loggedInUserDetails);
   const [liked, setLiked] = useState(false);
   const [likeProcessing, setLikeProcessing] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const userId = user?.login?.data?.user?._id;
+  const userId = user?.data?.userData?._id;
   // const liked: string | undefined = props.like.find(item => item === userId);
 
   useEffect(()=>{
@@ -105,17 +106,17 @@ const Post: React.FC<PostProps> = (props) => {
     <div>
       <div className={styles.container}>
         <div className={styles.postHeader}>
-          <div>
-            <div className={styles.icon}>
-              <img src={props.user?.avatar} />
+          <div className={styles.iconAndUserame}>
+            <div>
+              <img className={styles.profileLogo} src={props.user?.avatar} />
             </div>
             <div className={styles.profiledata}>
-              <div>{props.user?.username}</div>
-              <div>{formatDateToRelative(props.createdAt)}</div>
+              <div className={styles.profileUserName}>{props.user?.username}</div>
+              <div className={styles.userNameAndTime}>{formatDateToRelative(props.createdAt)}</div>
             </div>
           </div>
           <div>
-            <button onClick={handleClick}>
+            <button className={styles.optionButton} onClick={handleClick}>
               <MoreHorizIcon />
             </button>
           </div>
@@ -125,22 +126,22 @@ const Post: React.FC<PostProps> = (props) => {
         </div>
         <div className={styles.image}>
           <SimpleSlider>
-          {props.image.map((image) => (
-            <img className={styles.image} src={`${BASE_URL}/${image}`} alt="" />
+          {props.image.map((image, index) => (
+            <img key={index} className={styles.image} src={`${BASE_URL}/${image}`} alt="" />
           ))}
           </SimpleSlider>
           
         </div>
         <div className={styles.iconContainer}>
           <div className={styles.likeCommentShare}>
-            <button disabled={likeProcessing} onClick={likedPost}>
-              <FavoriteBorderIcon />
+            <button className={styles.likeButton} disabled={likeProcessing} onClick={likedPost}>
+              {liked? <FavoriteIcon className={styles.buttonColor}/> : <FavoriteBorderIcon className={styles.unLikedButton}/>}
             </button>
             <div>
-              <CommentIcon />
+              <CommentIcon className={styles.commentIcon}/>
             </div>
             <div>
-              <SendIcon />
+              <SendIcon className={styles.sendIcon}/>
             </div>
           </div>
           <div className={styles.savedIcon}>
@@ -164,7 +165,7 @@ const Post: React.FC<PostProps> = (props) => {
         TransitionComponent={Fade}
       >
         <div>
-          <MenuItem onClick={onEdit}>Edit Profile</MenuItem>
+          <MenuItem onClick={onEdit}>Edit Post</MenuItem>
           <MenuItem onClick={onDelete}>Remove Post</MenuItem>
           <MenuItem onClick={handleClose}>CopyLink</MenuItem>
         </div>

@@ -71,6 +71,10 @@ const SuggestionProfile: React.FC<SuggestionProfileProps> = (props) => {
           </button> */}
           <img src={props.avatar} alt={props.fullname} />
         </div>
+        <img
+                className={styles.userIcon}
+                src={user?.data?.userData?.avatar}
+              />
         <div className={styles.title}>
           <p className={styles.user}>{props.username}</p>
           <p className={styles.user}>{props.fullname}</p>
