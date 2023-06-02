@@ -14,7 +14,7 @@ const SuggestionProfile: React.FC<SuggestionProfileProps> = (props) => {
   const user: any = useSelector<TStore>((state) => state.loggedInUserDetails);
   const [followUser, setFollowUser] = useState(false);
   const [followButton, setFollowButton] = useState(false);
-
+  const userData = user?.data?.userData;
   useEffect(() => {
     if (user.data) {
       const following = user.data.userData.following;
@@ -35,6 +35,23 @@ const SuggestionProfile: React.FC<SuggestionProfileProps> = (props) => {
           },
         });
         setFollowUser(true);
+        const notificationData = {
+          id: userData?._id,
+          recipients: props._id,
+          url: "",
+          text: `${userData?.username} has started to follow you.`,
+        };
+        const notification = await axios.post(
+          `${BASE_URL}/notification`,
+          notificationData,
+          {
+            headers: {
+              "X-Authorization": accessToken,
+            },
+          }
+        );
+        console.log(notification);
+        
       }
     } catch (error) {
       console.log(error);
@@ -72,9 +89,10 @@ const SuggestionProfile: React.FC<SuggestionProfileProps> = (props) => {
           <img src={props.avatar} alt={props.fullname} />
         </div>
         <img
-                className={styles.userIcon}
-                src={user?.data?.userData?.avatar}
-              />
+          alt=""
+          className={styles.userIcon}
+          src={user?.data?.userData?.avatar}
+        />
         <div className={styles.title}>
           <p className={styles.user}>{props.username}</p>
           <p className={styles.user}>{props.fullname}</p>

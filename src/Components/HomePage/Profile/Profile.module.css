@@ -58,3 +58,7 @@
 .postTextField{
     overflow: scroll;
 }
+.imageGalleryContainer{
+    width: 100%;
+    height: 100%;
+}

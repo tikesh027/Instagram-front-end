@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from "react";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import SendIcon from "@mui/icons-material/Send";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import CommentIcon from "@mui/icons-material/Comment";
-import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
+import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import styles from "./Post.module.css";
 import CommentWrapper from "../Comment/CommentWrapper";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Fade from "@mui/material/Fade";
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { TPost } from "../../HomePage";
-import { formatDateToRelative, getAccessTokenFromCookie } from "../../../../Constant/helpers";
+import {
+  formatDateToRelative,
+  getAccessTokenFromCookie,
+} from "../../../../Constant/helpers";
 import { useSelector } from "react-redux";
-import axios from 'axios';
+import axios from "axios";
 import { BASE_URL } from "../../../../Constant/Constant";
 import { TStore } from "../../../../Store/store";
 import SimpleSlider from "./ImageSlider";
-
 
 type PostProps = TPost & {
   openEditModal: () => void;
@@ -29,15 +31,28 @@ const Post: React.FC<PostProps> = (props) => {
   const user: any = useSelector<TStore>((state) => state.loggedInUserDetails);
   const [liked, setLiked] = useState(false);
   const [likeProcessing, setLikeProcessing] = useState(false);
+  const [savedPost, setSavedPost] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const userId = user?.data?.userData?._id;
+  const savedPosts = user?.data?.userData?.saved;
   // const liked: string | undefined = props.like.find(item => item === userId);
 
-  useEffect(()=>{
-   const postLiked: string | undefined = props.like.find(item => item === userId);
-   setLiked(Boolean(postLiked));
-  },[]);
+  useEffect(() => {
+    const postLiked: string | undefined = props.like.find(
+      (item) => item === userId
+    );
+    setLiked(Boolean(postLiked));
+  }, []);
+
+  useEffect(() => {
+    if(savedPosts && savedPosts.length){
+      const savedUserPost: string | undefined = savedPosts.find(
+        (item: any) => item._id === props._id
+      );
+      setSavedPost(Boolean(savedUserPost));
+    }
+  }, [savedPosts]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -48,13 +63,11 @@ const Post: React.FC<PostProps> = (props) => {
   const onEdit = () => {
     props.openEditModal();
     handleClose();
-    
-  }
+  };
   const onDelete = () => {
     handleClose();
     deletePost();
-  }
-
+  };
 
   const deletePost = async () => {
     const accessToken = getAccessTokenFromCookie();
@@ -70,13 +83,13 @@ const Post: React.FC<PostProps> = (props) => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const likedPost = async () => {
     const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
     try {
-      if(liked === false){
+      if (liked === false) {
         setLikeProcessing(true);
         const data = await axios.get(`${BASE_URL}/post/${props._id}/like`, {
           headers: {
@@ -88,7 +101,7 @@ const Post: React.FC<PostProps> = (props) => {
         console.log(data.data);
       } else {
         setLikeProcessing(true);
-        const data = await axios.get(`${BASE_URL}/post/${props._id}/unlike`,{
+        const data = await axios.get(`${BASE_URL}/post/${props._id}/unlike`, {
           headers: {
             "X-Authorization": accessToken,
           },
@@ -100,7 +113,41 @@ const Post: React.FC<PostProps> = (props) => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
+  const savePost = async () => {
+    const accessToken = getAccessTokenFromCookie();
+    if (!accessToken) return;
+    try {
+      const data = await axios.get(`${BASE_URL}/savepost/${props._id}`, {
+        headers: {
+          "X-Authorization": accessToken,
+        },
+      });
+      setSavedPost(true);
+      console.log(data.data);
+      props.reFreshPost();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const unSavePost = async () => {
+    const accessToken = getAccessTokenFromCookie();
+    if (!accessToken) return;
+    try {
+      const data = await axios.get(`${BASE_URL}/unsavepost/${props._id}`, {
+        headers: {
+          "X-Authorization": accessToken,
+        },
+      });
+      setSavedPost(false);
+      console.log(data.data);
+      props.reFreshPost();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
@@ -111,8 +158,12 @@ const Post: React.FC<PostProps> = (props) => {
               <img className={styles.profileLogo} src={props.user?.avatar} />
             </div>
             <div className={styles.profiledata}>
-              <div className={styles.profileUserName}>{props.user?.username}</div>
-              <div className={styles.userNameAndTime}>{formatDateToRelative(props.createdAt)}</div>
+              <div className={styles.profileUserName}>
+                {props.user?.username}
+              </div>
+              <div className={styles.userNameAndTime}>
+                {formatDateToRelative(props.createdAt)}
+              </div>
             </div>
           </div>
           <div>
@@ -126,32 +177,55 @@ const Post: React.FC<PostProps> = (props) => {
         </div>
         <div className={styles.image}>
           <SimpleSlider>
-          {props.image.map((image, index) => (
-            <img key={index} className={styles.image} src={`${BASE_URL}/${image}`} alt="" />
-          ))}
+            {props.image.map((image, index) => (
+              <img
+                key={index}
+                className={styles.image}
+                src={`${BASE_URL}/${image}`}
+                alt=""
+              />
+            ))}
           </SimpleSlider>
-          
         </div>
         <div className={styles.iconContainer}>
           <div className={styles.likeCommentShare}>
-            <button className={styles.likeButton} disabled={likeProcessing} onClick={likedPost}>
-              {liked? <FavoriteIcon className={styles.buttonColor}/> : <FavoriteBorderIcon className={styles.unLikedButton}/>}
+            <button
+              className={styles.likeButton}
+              disabled={likeProcessing}
+              onClick={likedPost}
+            >
+              {liked ? (
+                <FavoriteIcon className={styles.buttonColor} />
+              ) : (
+                <FavoriteBorderIcon className={styles.unLikedButton} />
+              )}
             </button>
             <div>
-              <CommentIcon className={styles.commentIcon}/>
+              <CommentIcon className={styles.commentIcon} />
             </div>
             <div>
-              <SendIcon className={styles.sendIcon}/>
+              <SendIcon className={styles.sendIcon} />
             </div>
           </div>
           <div className={styles.savedIcon}>
-            <div>
-              <TurnedInNotIcon />
-            </div>
+            <button
+              onClick={savedPost ? unSavePost : savePost}
+              className={styles.saveButton}
+            >
+              {savedPost ? (
+                <BookmarkOutlinedIcon />
+              ) : (
+                <BookmarkBorderOutlinedIcon />
+              )}
+            </button>
           </div>
         </div>
         <div>
-          <CommentWrapper postId={props._id} comment={props.comment} refreshComments={props.reFreshPost}/>
+          <CommentWrapper
+            postId={props._id}
+            comment={props.comment}
+            refreshComments={props.reFreshPost}
+          />
         </div>
       </div>
       <Menu
@@ -170,7 +244,6 @@ const Post: React.FC<PostProps> = (props) => {
           <MenuItem onClick={handleClose}>CopyLink</MenuItem>
         </div>
       </Menu>
-      
     </div>
   );
 };

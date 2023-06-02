@@ -8,6 +8,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import EditProfile from "./EditProfile/EditProfile";
 import { useSelector } from "react-redux";
 import { TStore } from "../../../Store/store";
+import StandardImageList from "./ImageGallery";
 
 const style = {
   position: "absolute" as "absolute",
@@ -25,8 +26,8 @@ const style = {
 type TabList = "POST" | "SAVED_POST";
 
 const Profile = () => {
-  const user: any = useSelector<TStore>((state) => state.User);
-  const userData = user?.login?.data?.user;
+  const user: any = useSelector<TStore>((state) => state.loggedInUserDetails);
+  const userData = user?.data?.userData;
   const [activeTab, setActiveTab] = useState<TabList>("POST");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -35,6 +36,12 @@ const Profile = () => {
   const handleActiveTab = (tab: TabList) => {
     setActiveTab(tab);
   };
+
+  if(user.isLoading){
+    return(
+      <h1>loading...</h1>
+    )
+  }
 
   return (
     <div>
@@ -88,10 +95,12 @@ const Profile = () => {
                     "imageURL 2"
                 ]}
             /> */}
+            <StandardImageList/>
           </>
         ) : (
           <>
             <h1>Saved Posts</h1>
+            <StandardImageList/>
           </>
         )}
       </div>

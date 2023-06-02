@@ -251,9 +251,10 @@ const HomePage = () => {
         <div className={styles.postPageContainer}>
           <div className={styles.postPage}>
             <img
-                className={styles.avatarButtonBarIcon}
-                src={user?.data?.userData?.avatar}
-              />
+              className={styles.avatarButtonBarIcon}
+              src={user?.data?.userData?.avatar}
+              alt=""
+            />
             <div className={styles.buttonBarSize}>
               <button className={styles.buttonBar} onClick={handleOpen}>
                 {user?.data?.userData?.fullname} What are you Thinking?
@@ -281,6 +282,7 @@ const HomePage = () => {
               <img
                 className={styles.userIcon}
                 src={user?.data?.userData?.avatar}
+                alt=""
               />
               <div className={styles.profileName}>
                 <span>{user?.data?.userData?.username}</span>

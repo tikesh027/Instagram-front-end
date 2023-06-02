@@ -102,3 +102,10 @@
 .sendIcon:hover{
     cursor: pointer;
 }
+.saveButton{
+    border: none;
+    background-color: white;
+}
+.saveButton:hover{
+    cursor: pointer;
+}
