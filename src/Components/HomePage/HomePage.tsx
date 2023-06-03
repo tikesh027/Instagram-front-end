@@ -242,6 +242,13 @@ const HomePage = () => {
     setUploadedDisplayImages(imageUrls);
   };
 
+
+  if(user.isLoading){
+    return(
+      <h1>loading...</h1>
+    )
+  }
+
   return (
     <div>
       <div>
@@ -302,7 +309,7 @@ const HomePage = () => {
                 </button>
               </div>
             </div>
-            <div>
+            <div className={styles.recommendationContainer}>
               {userRecommendation.map((item) => (
                 <SuggestionProfile
                   _id={item._id}

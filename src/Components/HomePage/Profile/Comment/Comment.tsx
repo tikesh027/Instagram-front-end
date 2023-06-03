@@ -8,7 +8,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { TStore } from "../../../../Store/store";
 import { BASE_URL } from "../../../../Constant/Constant";
-import { getAccessTokenFromCookie } from "../../../../Constant/helpers";
+import { formatDateToRelative, getAccessTokenFromCookie } from "../../../../Constant/helpers";
 
 export type TComment = {
   content: string;
@@ -21,14 +21,15 @@ export type TComment = {
   key: string;
   _id: string;
   refreshDeleteComment:() => Promise<void>;
+  commentCreatedAt: string;
 }
 
 type CommentProps = TComment & {
-
+  setReplyingTo: (id: string) => void;
 };
 
 const Comment: React.FC<CommentProps> = (props) => {
-  const user: any = useSelector<TStore>((state) => state.User);
+  const user: any = useSelector<TStore>((state) => state.loggedInUserDetails);
   const [commentText, setCommentText] = useState(props.content);
   const [editComment, setEditComment] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -90,14 +91,17 @@ const Comment: React.FC<CommentProps> = (props) => {
     handleClose();
   }
 
+  const setReply = () => {
+    props.setReplyingTo(String(props._id));
+  }
 
   return (
     <div>
       <div className={styles.profile}>
         <div>
-          <AccountCircleIcon />
+          <img className={styles.avatarIcon} src={props.user?.avatar} alt=""/>
         </div>
-        <div>{props.user?.username}</div>
+        <div className={styles.userNameTitle}>{props.user?.username}</div>
       </div>
       <div className={styles.commentWrapper}>
         <div className={styles.comments}>
@@ -115,9 +119,9 @@ const Comment: React.FC<CommentProps> = (props) => {
               )}
             </div>
             <div className={styles.likeReply}>
-              <div>3 seconds ago</div>
+              <div>{formatDateToRelative(props.commentCreatedAt)}</div>
               <div>Like</div>
-              <div>Reply</div>
+              <button className={styles.replyButton}>Reply</button>
             </div>
           </div>
           {/* <div onClick={() => setEditComment(true)} className={styles.edit}>

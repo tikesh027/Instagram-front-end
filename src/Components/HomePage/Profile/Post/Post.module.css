@@ -7,6 +7,12 @@
 .image{
     max-width: 100%;
 }
+.likeCount{
+    display: flex;
+    gap: 5px;
+    font-size: 15px;
+    margin-left: 20px;
+}
 .profiledata{
     display: flex;
     flex-direction: column;

@@ -1,7 +1,7 @@
 .container{
     display: flex;
     justify-content: space-around;
-    width: 350px;
+    width: 90%;
     margin-top: 20px;
 }
 .icon{
@@ -28,9 +28,9 @@
     border: 1px solid rgb(31, 181, 131);
     color: rgb(31, 181, 131);
     background-color: white;
-    font-size: 15px;
-    height: 2.2rem;
-    width: 4.5rem;
+    font-size: 17px;
+    height: 50%;
+    width: 100%;
     border-radius: 5px;
 }
 .followButton:hover{

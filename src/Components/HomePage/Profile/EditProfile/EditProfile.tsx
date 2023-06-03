@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputWithLabel from "../../../CommonComponents/InputWithLabel/InputWithLabel";
 import { useSelector } from "react-redux";
 import { TStore } from "../../../../Store/store";
@@ -7,6 +7,8 @@ import { BASE_URL } from "../../../../Constant/Constant";
 import styles from "./EditProfile.module.css";
 import { getAccessTokenFromCookie } from "../../../../Constant/helpers";
 
+
+
 type updateForm = {
   value: string;
   error: string;
@@ -14,44 +16,73 @@ type updateForm = {
 };
 
 const EditProfile: React.FC = () => {
-  const user: any = useSelector<TStore>((state) => state.User);
-  const userData = user?.login?.data?.user;
+  const user: any = useSelector<TStore>((state) => state.loggedInUserDetails);
+  const userData = user?.data?.userData;
 
   const [fullName, setFullName] = useState<updateForm>({
-    value: userData.username,
+    value: "",
     error: "",
     isValid: true,
   });
   const [avatar, setAvatar] = useState<updateForm>({
-    value: userData.avatar,
+    value: "",
     error: "",
     isValid: true,
   });
   const [mobileNo, setMobileNo] = useState<updateForm>({
-    value: userData.mobile,
+    value: "",
     error: "",
     isValid: true,
   });
   const [address, setAddress] = useState<updateForm>({
-    value: userData.address,
+    value: "",
     error: "",
     isValid: true,
   });
   const [story, setStory] = useState<updateForm>({
-    value: userData.story,
+    value: "",
     error: "",
     isValid: true,
   });
   const [website, setWebsite] = useState<updateForm>({
-    value: userData.website,
+    value: "",
     error: "",
     isValid: true,
   });
   const [gender, setGender] = useState<updateForm>({
-    value: userData.gender,
+    value: "",
     error: "",
     isValid: true,
   });
+
+  useEffect(()=>{
+    if(userData){
+      setFullName((prev) => ({
+        ...prev,
+        value: userData.fullname
+      }));
+      setAvatar((prev) => ({
+        ...prev,
+        value: userData.avatar
+      }));
+      setMobileNo((prev) => ({
+        ...prev,
+        value: userData.mobile
+      }));
+      setAddress((prev) => ({
+        ...prev,
+        value: userData.address
+      }));
+      setWebsite((prev) => ({
+        ...prev,
+        value: userData.website
+      }));
+      setGender((prev) => ({
+        ...prev,
+        value: userData.gender
+      }));
+    }
+  },[userData]);
 
   const handleAvatar = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAvatar({
@@ -182,6 +213,12 @@ const EditProfile: React.FC = () => {
       console.log(error);
     }
   };
+
+  if(user.isLoading){
+    return(
+      <h1>loading...</h1>
+    )
+  }
 
   return (
     <div className="styles.editProfileContainer">

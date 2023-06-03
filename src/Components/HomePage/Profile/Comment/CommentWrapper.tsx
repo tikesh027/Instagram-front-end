@@ -16,6 +16,7 @@ type CommentWrapperProps = {
 
 const CommentWrapper: React.FC<CommentWrapperProps> = (props) => {
   const user: any = useSelector<TStore>((state) => state.User);
+  const [replyingTo, setReplyingTo] = useState("");
   const [createComment, setCreateComment] = useState("");
 
   const handleCreateComment = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,6 +32,7 @@ const CommentWrapper: React.FC<CommentWrapperProps> = (props) => {
     const userNewComment = {
       content: createComment,
       postId: props.postId,
+      reply: replyingTo ? [replyingTo] : undefined
     };
 
     try {
@@ -42,6 +44,7 @@ const CommentWrapper: React.FC<CommentWrapperProps> = (props) => {
       console.log(data.data);
       props.refreshComments();
       setCreateComment("");
+      setReplyingTo("");
     } catch (error) {
       console.log(error);
     }
@@ -61,6 +64,8 @@ const CommentWrapper: React.FC<CommentWrapperProps> = (props) => {
           key={item._id}
           _id={item._id}
           refreshDeleteComment={props.refreshComments}
+          setReplyingTo={setReplyingTo}
+          commentCreatedAt={item.createdAt}
         />
       ))}
 

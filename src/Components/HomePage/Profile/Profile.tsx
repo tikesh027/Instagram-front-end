@@ -15,12 +15,11 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 580,
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  border: "1px solid #000",
   boxShadow: 24,
-  p: 10,
-  padding: 5,
+  padding: 2,
+  width: 500,
 };
 
 type TabList = "POST" | "SAVED_POST";
@@ -37,10 +36,8 @@ const Profile = () => {
     setActiveTab(tab);
   };
 
-  if(user.isLoading){
-    return(
-      <h1>loading...</h1>
-    )
+  if (user.isLoading) {
+    return <h1>loading...</h1>;
   }
 
   return (
@@ -95,12 +92,12 @@ const Profile = () => {
                     "imageURL 2"
                 ]}
             /> */}
-            <StandardImageList/>
+            <StandardImageList />
           </>
         ) : (
           <>
             <h1>Saved Posts</h1>
-            <StandardImageList/>
+            <StandardImageList />
           </>
         )}
       </div>
@@ -118,16 +115,10 @@ const Profile = () => {
                 <hr />
               </Typography>
             </div>
-            
           </div>
-          <Typography
-            id="modal-modal-description"
-            sx={{ mb: 10, mt: 2, ml: 5, mr: 5 }}
-          >
-            <div className={styles.postTextField}>
-              <EditProfile />
-            </div>
-          </Typography>
+          <div className={styles.postTextField}>
+            <EditProfile />
+          </div>
         </Box>
       </Modal>
     </div>

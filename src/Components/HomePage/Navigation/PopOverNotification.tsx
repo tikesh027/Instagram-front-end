@@ -9,6 +9,7 @@ import { TNotification } from "./Navigation";
 
 type PopOverNotificationProps = {
   notification: TNotification[];
+  deleteAllNotification: () => void;
 };
 
 const PopOverNotification: React.FC<PopOverNotificationProps> = (props) => {
@@ -27,7 +28,10 @@ const PopOverNotification: React.FC<PopOverNotificationProps> = (props) => {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-
+  const onDeleteNotification = () => {
+    props.deleteAllNotification();
+    handleClose();
+  }
   return (
     <>
       <button
@@ -69,7 +73,12 @@ const PopOverNotification: React.FC<PopOverNotificationProps> = (props) => {
           </div>
           <hr />
           <div className={styles.clearNotiButton}>
-            <button className={styles.deleteAllButton}>Delete All</button>
+            <button
+              className={styles.deleteAllButton}
+              onClick={onDeleteNotification}
+            >
+              Delete All
+            </button>
           </div>
         </ul>
       </Popover>

@@ -2,6 +2,10 @@
     margin-top: 18px;
     margin-left: 10px;
     display: flex;
+    gap: 10px;
+}
+.userNameTitle{
+    margin-top: 5px;
 }
 .commentWrapper{ 
     margin: 0;
@@ -43,4 +47,15 @@
 .edit{
     display: flex;
     align-items: flex-end;
+}
+.avatarIcon{
+    height: 30px;
+    width: 30px;
+}
+.replyButton{
+    border: 0;
+    background-color: rgb(176, 176, 176);
+}
+.replyButton:hover{
+    cursor: pointer;
 }

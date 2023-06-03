@@ -46,7 +46,7 @@ const Post: React.FC<PostProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if(savedPosts && savedPosts.length){
+    if (savedPosts && savedPosts.length) {
       const savedUserPost: string | undefined = savedPosts.find(
         (item: any) => item._id === props._id
       );
@@ -96,6 +96,21 @@ const Post: React.FC<PostProps> = (props) => {
             "X-Authorization": accessToken,
           },
         });
+        // const notificationData = {
+        //   id: userData?._id,
+        //   recipients: props._id,
+        //   url: "",
+        //   text: `${userData?.username} has started to follow you.`,
+        // };
+        // const notification = await axios.post(
+        //   `${BASE_URL}/notification`,
+        //   notificationData,
+        //   {
+        //     headers: {
+        //       "X-Authorization": accessToken,
+        //     },
+        //   }
+        // );
         setLikeProcessing(false);
         setLiked(true);
         console.log(data.data);
@@ -155,7 +170,11 @@ const Post: React.FC<PostProps> = (props) => {
         <div className={styles.postHeader}>
           <div className={styles.iconAndUserame}>
             <div>
-              <img className={styles.profileLogo} src={props.user?.avatar} />
+              <img
+                className={styles.profileLogo}
+                src={props.user?.avatar}
+                alt=""
+              />
             </div>
             <div className={styles.profiledata}>
               <div className={styles.profileUserName}>
@@ -207,6 +226,7 @@ const Post: React.FC<PostProps> = (props) => {
               <SendIcon className={styles.sendIcon} />
             </div>
           </div>
+
           <div className={styles.savedIcon}>
             <button
               onClick={savedPost ? unSavePost : savePost}
@@ -219,6 +239,10 @@ const Post: React.FC<PostProps> = (props) => {
               )}
             </button>
           </div>
+        </div>
+        <div className={styles.likeCount}>
+          <div>{props.like.length}</div>
+          <div>likes</div>
         </div>
         <div>
           <CommentWrapper
