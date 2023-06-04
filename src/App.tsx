@@ -1,30 +1,50 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import "slick-carousel/slick/slick.css"; 
+import { useDispatch, useSelector } from "react-redux";
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./App.css";
 import SignUpForm from "./Components/SignInForm/SignInForm";
 import LoginForm from "./Components/LogInForm/LogInForm";
 import HomePage from "./Components/HomePage/HomePage";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, redirect } from "react-router-dom";
 import SuggestionProfile from "./Components/HomePage/suggestionProfile/SuggestionProfile";
 import Profile from "./Components/HomePage/Profile/Profile";
 import { fetchUserLoggedInUserDetails } from "./Actions/UserDetailsAction/UserDetailsAction";
+import { TStore } from "./Store/store";
 
 const App: React.FC = () => {
   const dispatch = useDispatch<any>();
+  const loggedInUser: any = useSelector<TStore>(
+    (state) => state.loggedInUserDetails
+  );
+
   useEffect(() => {
-    dispatch(fetchUserLoggedInUserDetails());
+    dispatch(fetchUserLoggedInUserDetails()).then(() => {
+      redirect('/');
+    });
   }, []);
+  useEffect(()=>{
+    if(loggedInUser.isLoading && loggedInUser.data){
+      console.log("===>")
+      redirect('/');
+    }
+  },[loggedInUser]);
+  if (loggedInUser.isLoading) {
+    return <div>Loading</div>;
+  }
   return (
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          {loggedInUser.data ? (
+            <>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/MyProfile" element={<Profile />} />
+            </>
+          ) : null}
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignUpForm />} />
-          {/* <Route path="/suggestions" element={<SuggestionProfile />} /> */}
-          <Route path="/MyProfile" element={<Profile />} />
+          <Route path="*" element={<div>404 not found</div>} />
         </Routes>
       </BrowserRouter>
     </div>

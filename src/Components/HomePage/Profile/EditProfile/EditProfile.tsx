@@ -221,8 +221,11 @@ const EditProfile: React.FC = () => {
   }
 
   return (
-    <div className="styles.editProfileContainer">
-      <div>
+    <div >
+      <div className={styles.iconContainer}>
+        <img className={styles.icon} src={userData.avatar} alt=""/>
+      </div>
+      <div className={styles.editProfileContainer}>
         <InputWithLabel
           inputType="text"
           label="FullName"
@@ -261,7 +264,7 @@ const EditProfile: React.FC = () => {
         />
       </div>
       <div>
-        <button onClick={editUserProfile}>submit</button>
+        <button className={styles.submitButton} onClick={editUserProfile}>Save</button>
       </div>
     </div>
   );

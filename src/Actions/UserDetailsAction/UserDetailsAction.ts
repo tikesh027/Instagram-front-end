@@ -48,7 +48,7 @@ export function fetchUserLoggedInUserDetails() {
         })
         .catch((error) => {
           dispatch(fetchUserDetailsFailed(error));
-          reject(error);
+          // reject(error);
         });
     });
 }

@@ -9,7 +9,7 @@ import Fade from "@mui/material/Fade";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../../Constant/Constant";
-import { getAccessTokenFromCookie } from "../../../Constant/helpers";
+import { getAccessTokenFromCookie, removeAccessTokenCookie } from "../../../Constant/helpers";
 import BasicPopover from "./PopOverNotification";
 import { useSelector } from "react-redux";
 import { TStore } from "../../../Store/store";
@@ -70,11 +70,20 @@ const Navigation = () => {
     setAnchorEl(null);
   };
 
+  const onLogOut = () => {
+    removeAccessTokenCookie()
+    handleClose();
+  }
+
   return (
     <div className={styles.navContainer}>
       <div className={styles.navbar}>
         <div>
-          <h1 className={styles.title}>MERNY</h1>
+          <h1 className={styles.title}>
+            <Link className={styles.mernyLogo} to={"/"}>
+              MERNY
+            </Link>
+          </h1>
         </div>
         <div>
           <input
@@ -115,7 +124,7 @@ const Navigation = () => {
           <MenuItem onClick={handleClose}>Profile</MenuItem>
         </Link>
         <Link to={"/login"}>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
+          <MenuItem onClick={onLogOut}>Logout</MenuItem>
         </Link>
       </Menu>
     </div>

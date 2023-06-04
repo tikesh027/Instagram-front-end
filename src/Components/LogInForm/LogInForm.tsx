@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import InputWithLabel from "../CommonComponents/InputWithLabel/InputWithLabel";
 import styles from "./LogInForm.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../Actions/UserActions/UserActions";
+import { fetchUserLoggedInUserDetails } from "../../Actions/UserDetailsAction/UserDetailsAction";
 
 type signUpInput = {
   value: string;
@@ -66,12 +67,15 @@ const SignUpForm: React.FC = () => {
   const submitForm = () => {
     if (validateFrom()) {
       dispatch(login(emailAddress.value, password.value))
-      .then((res: any) => {
-        navigate('/');
-        console.log("here", res);
-      }).catch((error: any) => {
-        console.log(error);
-      });
+        .then((res: any) => {
+          dispatch(fetchUserLoggedInUserDetails()).then(() => {
+            redirect("/");
+            console.log("here", res);
+          });
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
     }
   };
 

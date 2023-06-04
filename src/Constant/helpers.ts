@@ -41,3 +41,7 @@ export function getAccessTokenFromCookie(){
   const accessToken = cookies.get('user-access-token');
   return accessToken;
 }
+
+export function removeAccessTokenCookie(){
+  cookies.remove('user-access-token');
+}
