@@ -48,6 +48,9 @@
     display: flex;
     align-items: flex-end;
 }
+.editBtn:hover{
+    cursor: pointer;
+}
 .avatarIcon{
     height: 30px;
     width: 30px;
@@ -58,4 +61,24 @@
 }
 .replyButton:hover{
     cursor: pointer;
+}
+.commentLikeButton{
+    border: none;
+    background-color: rgb(176, 176, 176);
+    margin-top: 5px;
+}
+.commentLikeButton:hover{
+    cursor: pointer;
+}
+.buttonColor{
+    color: red;
+    font-size: 18px !important;
+}
+.unLikedButton{
+    font-size: 18px !important;
+}
+.likeAndMenu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

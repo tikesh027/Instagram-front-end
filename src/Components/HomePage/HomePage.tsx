@@ -15,6 +15,7 @@ import axios from "axios";
 import { BASE_URL } from "../../Constant/Constant";
 import { getAccessTokenFromCookie } from "../../Constant/helpers";
 import { cloneDeep } from "lodash";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute" as "absolute",
@@ -67,6 +68,15 @@ const HomePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEditPost, setIsEditPost] = useState(false);
   const [selectedPost, setSelectedPost] = useState<TPost | null>(null);
+  const navigate = useNavigate();
+  useEffect(()=>{
+    const accessToken = getAccessTokenFromCookie();
+    if(!accessToken || !user.data){
+      console.log("here ====>")
+      navigate('/login');
+    }
+  },[user]);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);

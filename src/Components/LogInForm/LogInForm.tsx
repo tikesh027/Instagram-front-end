@@ -69,7 +69,7 @@ const SignUpForm: React.FC = () => {
       dispatch(login(emailAddress.value, password.value))
         .then((res: any) => {
           dispatch(fetchUserLoggedInUserDetails()).then(() => {
-            redirect("/");
+            navigate("/");
             console.log("here", res);
           });
         })

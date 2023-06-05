@@ -43,6 +43,7 @@ const Post: React.FC<PostProps> = (props) => {
       (item) => item === userId
     );
     setLiked(Boolean(postLiked));
+    
   }, []);
 
   useEffect(() => {

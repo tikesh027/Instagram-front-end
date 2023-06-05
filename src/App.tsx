@@ -19,16 +19,8 @@ const App: React.FC = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchUserLoggedInUserDetails()).then(() => {
-      redirect('/');
-    });
+    dispatch(fetchUserLoggedInUserDetails());
   }, []);
-  useEffect(()=>{
-    if(loggedInUser.isLoading && loggedInUser.data){
-      console.log("===>")
-      redirect('/');
-    }
-  },[loggedInUser]);
   if (loggedInUser.isLoading) {
     return <div>Loading</div>;
   }
@@ -36,12 +28,8 @@ const App: React.FC = () => {
     <div>
       <BrowserRouter>
         <Routes>
-          {loggedInUser.data ? (
-            <>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/MyProfile" element={<Profile />} />
-            </>
-          ) : null}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/MyProfile" element={<Profile />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignUpForm />} />
           <Route path="*" element={<div>404 not found</div>} />

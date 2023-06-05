@@ -57,7 +57,7 @@ const CommentWrapper: React.FC<CommentWrapperProps> = (props) => {
           content={item.content}
           tag={item.tag}
           reply={item.reply}
-          like={item.like}
+          like={item.likes}
           user={item.user}
           postId={item.postId}
           postUserId={item.postUserId}
