@@ -159,7 +159,7 @@ const HomePage = () => {
           formData.append("image", image, image.name);
         });
       }
-      const data = await axios.post(
+      const data = await axios.put(
         `${BASE_URL}/post/${selectedPost?._id}`,
         formData,
         {

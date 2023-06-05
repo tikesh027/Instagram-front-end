@@ -29,9 +29,10 @@ const SuggestionProfile: React.FC<SuggestionProfileProps> = (props) => {
     setFollowButton(true);
     try {
       if (followUser === false) {
-        const data = await axios.get(`${BASE_URL}/user/${props._id}/follow`, {
+        const data = await axios.put(`${BASE_URL}/user/${props._id}/follow`, {}, {
           headers: {
             "X-Authorization": accessToken,
+            'X-HTTP-Method-Override': 'PATCH'
           },
         });
         setFollowUser(true);
@@ -65,7 +66,7 @@ const SuggestionProfile: React.FC<SuggestionProfileProps> = (props) => {
     if (!accessToken) return;
     setFollowButton(true);
     try {
-      const data = await axios.get(`${BASE_URL}/user/${props._id}/unfollow`, {
+      const data = await axios.put(`${BASE_URL}/user/${props._id}/unfollow`,{}, {
         headers: {
           "X-Authorization": accessToken,
         },

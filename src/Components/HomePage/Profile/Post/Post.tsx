@@ -95,7 +95,7 @@ const Post: React.FC<PostProps> = (props) => {
     try {
       if (liked === false) {
         setLikeProcessing(true);
-        const data = await axios.get(`${BASE_URL}/post/${props._id}/like`, {
+        const data = await axios.put(`${BASE_URL}/post/${props._id}/like`,{}, {
           headers: {
             "X-Authorization": accessToken,
           },
@@ -121,7 +121,7 @@ const Post: React.FC<PostProps> = (props) => {
         console.log(data.data);
       } else {
         setLikeProcessing(true);
-        const data = await axios.get(`${BASE_URL}/post/${props._id}/unlike`, {
+        const data = await axios.put(`${BASE_URL}/post/${props._id}/unlike`,{}, {
           headers: {
             "X-Authorization": accessToken,
           },
@@ -140,7 +140,7 @@ const Post: React.FC<PostProps> = (props) => {
     const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
     try {
-      const data = await axios.get(`${BASE_URL}/savepost/${props._id}`, {
+      const data = await axios.put(`${BASE_URL}/savepost/${props._id}`,{}, {
         headers: {
           "X-Authorization": accessToken,
         },
@@ -157,7 +157,7 @@ const Post: React.FC<PostProps> = (props) => {
     const accessToken = getAccessTokenFromCookie();
     if (!accessToken) return;
     try {
-      const data = await axios.get(`${BASE_URL}/unsavepost/${props._id}`, {
+      const data = await axios.put(`${BASE_URL}/unsavepost/${props._id}`,{}, {
         headers: {
           "X-Authorization": accessToken,
         },

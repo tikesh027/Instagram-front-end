@@ -203,7 +203,7 @@ const EditProfile: React.FC = () => {
       gender: gender.value,
     };
     try {
-      const data = await axios.post(`${BASE_URL}/user`, userData,{
+      const data = await axios.put(`${BASE_URL}/user`, userData,{
         headers: {
           "X-Authorization": accessToken,
         },
