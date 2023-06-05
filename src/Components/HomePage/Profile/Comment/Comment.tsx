@@ -92,20 +92,22 @@ const Comment: React.FC<CommentProps> = (props) => {
     handleClose();
   };
   const onDelete = async () => {
-    const accessToken = getAccessTokenFromCookie();
-    if (!accessToken) return;
-    try {
-      const data = await axios.delete(`${BASE_URL}/comment/${props._id}`, {
-        headers: {
-          "X-Authorization": accessToken,
-        },
-      });
-      props.refreshDeleteComment();
-      console.log(data.data);
-    } catch (error) {
-      console.log(error);
+    if (window.confirm("sure you want to delete the comment")) {
+      const accessToken = getAccessTokenFromCookie();
+      if (!accessToken) return;
+      try {
+        const data = await axios.delete(`${BASE_URL}/comment/${props._id}`, {
+          headers: {
+            "X-Authorization": accessToken,
+          },
+        });
+        props.refreshDeleteComment();
+        console.log(data.data);
+      } catch (error) {
+        console.log(error);
+      }
+      handleClose();
     }
-    handleClose();
   };
 
   const likeAComment = async () => {
@@ -196,7 +198,7 @@ const Comment: React.FC<CommentProps> = (props) => {
               </button>
             </div>
             <div onClick={handleClick} className={styles.edit}>
-              <MoreVertIcon className={styles.editBtn}/>
+              <MoreVertIcon className={styles.editBtn} />
             </div>
           </div>
         </div>

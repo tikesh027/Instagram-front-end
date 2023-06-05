@@ -32,6 +32,7 @@ const Post: React.FC<PostProps> = (props) => {
   const [liked, setLiked] = useState(false);
   const [likeProcessing, setLikeProcessing] = useState(false);
   const [savedPost, setSavedPost] = useState(false);
+  const [postLikeCount, setPostLikeCount] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const userId = user?.data?.userData?._id;
@@ -43,8 +44,8 @@ const Post: React.FC<PostProps> = (props) => {
       (item) => item === userId
     );
     setLiked(Boolean(postLiked));
-    
-  }, []);
+    setPostLikeCount(props.like.length);
+  }, [props.like]);
 
   useEffect(() => {
     if (savedPosts && savedPosts.length) {
@@ -66,8 +67,10 @@ const Post: React.FC<PostProps> = (props) => {
     handleClose();
   };
   const onDelete = () => {
-    handleClose();
-    deletePost();
+    if(window.confirm("sure you want to delete the post")){
+      deletePost();
+      handleClose();
+    }
   };
 
   const deletePost = async () => {
@@ -114,6 +117,7 @@ const Post: React.FC<PostProps> = (props) => {
         // );
         setLikeProcessing(false);
         setLiked(true);
+        setPostLikeCount((prevState) => prevState + 1);
         console.log(data.data);
       } else {
         setLikeProcessing(true);
@@ -124,6 +128,7 @@ const Post: React.FC<PostProps> = (props) => {
         });
         setLikeProcessing(false);
         setLiked(false);
+        setPostLikeCount((prevState) => prevState - 1);
         console.log(data.data);
       }
     } catch (error) {
@@ -242,7 +247,7 @@ const Post: React.FC<PostProps> = (props) => {
           </div>
         </div>
         <div className={styles.likeCount}>
-          <div>{props.like.length}</div>
+          <div>{postLikeCount}</div>
           <div>likes</div>
         </div>
         <div>
